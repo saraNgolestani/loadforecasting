@@ -3,7 +3,7 @@ import pandas as pd
 
 class DataLoader():
      def __init__(self,  history_start:pd.Timestamp, history_end:pd.Timestamp, winter: bool):
-        self.path =  r'C:\Users\snaserigolestani\Downloads\loadforecasting\data\Load and Temp Hist Data.csv'
+        self.path =  r'./data/Load and Temp Hist Data.csv'
         self.history_start = history_start
         self.history_end = history_end
         self.master_df = None
@@ -20,12 +20,14 @@ class DataLoader():
         df.drop(columns=['ADJ_DATE', 'DEL_DATE', 'HB'], inplace=True)
 
         # Extracting calendar features 
+        df['SUN_UP'] = df['DATETIME'].dt.hour.apply(lambda x: 1 if 7 <= x <= 10 or 16 <= x <= 21 else 0)
         df['MONTH'] = df['DATETIME'].dt.month
         df['DAY'] = df['DATETIME'].dt.day
         df['DAYOFWEEK'] = df['DATETIME'].dt.dayofweek
         df['WEEKEND'] = df['DAYOFWEEK'].apply(lambda x: 1 if x >= 5 else 0)
 
         # lagged wthr data for better comprehention
+        df['EXTREME_COLD'] = df['TEMPERATURE'].apply(lambda x: 1 if x <= -20 else 0)
         df['TEMP_LAG_2H'] = df['TEMPERATURE'].shift(2).fillna(method='bfill', limit=2)
         df = df[df['DATETIME'].isin(self.date_range)]
         self.master_df = df

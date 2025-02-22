@@ -70,19 +70,20 @@ class Diagnose_Forecast():
         df = master_df[master_df.index.year == wthr_year]
         X_pred = pd.DataFrame()
         #the following should be for all wthr related or scenario related values.
-        wthr_df = df[['TEMP_LAG_2H', 'TEMPERATURE']]
+        wthr_df = df[['TEMP_LAG_2H', 'TEMPERATURE', 'EXTREME_COLD']]
         wthr_df.index = wthr_df.index.map(lambda dt: self.safe_replace_year(dt, forecast_start.year))
         wthr_df = wthr_df[(wthr_df.index >= forecast_start) & (wthr_df.index <= forecast_end)]
         date_range = pd.date_range(forecast_start, forecast_end, freq='h')
         # prepare the calendar related values
         X_pred['DATETIME'] = date_range
+        X_pred['SUN_UP'] = X_pred['DATETIME'].dt.hour.apply(lambda x: 1 if 7 <= x <= 10 or 16 <= x <= 21 else 0)
         X_pred['MONTH'] = X_pred['DATETIME'].dt.month
         X_pred['DAY'] = X_pred['DATETIME'].dt.day
         X_pred['HE'] = X_pred['DATETIME'].dt.hour + 1
         X_pred['DAYOFWEEK'] = X_pred['DATETIME'].dt.dayofweek
         X_pred['WEEKEND'] = X_pred['DAYOFWEEK'].apply(lambda x: 1 if x >= 5 else 0)
         X_pred.set_index('DATETIME', inplace=True)
-        X_pred[['TEMP_LAG_2H', 'TEMPERATURE']] = wthr_df[['TEMP_LAG_2H', 'TEMPERATURE']]
+        X_pred[['TEMP_LAG_2H', 'TEMPERATURE', 'EXTREME_COLD']]= wthr_df[['TEMP_LAG_2H', 'TEMPERATURE', 'EXTREME_COLD']]
         
         Y_pred_true = master_df[(master_df.index >= forecast_start) & (master_df.index <= forecast_end)]['AIL_ACTUAL']
 
@@ -95,9 +96,9 @@ class Diagnose_Forecast():
         if not Y_pred_true.empty:
             mape  = mean_absolute_percentage_error(Y_pred_true, Y_pred)
         else: mape = 'NA'
-        return X_pred, Y_pred, Y_pred_true, mape
+        return master_df, X_pred, Y_pred, Y_pred_true, mape
 
-test = Diagnose_Forecast(train_start=pd.Timestamp('2021-01-01 00:00:00'), train_end= pd.Timestamp('2025-01-31 23:59:59'), validation_period=14, models=['XGBoost', 'Randomforest', 'LinearRegression'], winter=False)
-_, _, _, mape = test.forecast(forecast_start=pd.Timestamp('2024-10-15 00:00:00'), forecast_end=pd.Timestamp('2024-10-30 00:00:00'), wthr_year=2023, featured_metric='mape')
-
+# test = Diagnose_Forecast(train_start=pd.Timestamp('2021-01-01 00:00:00'), train_end= pd.Timestamp('2025-01-31 23:59:59'), validation_period=14, models=['XGBoost', 'Randomforest', 'LinearRegression'], winter=False)
+# _, _, _, _, mape = test.forecast(forecast_start=pd.Timestamp('2024-10-15 00:00:00'), forecast_end=pd.Timestamp('2024-10-30 00:00:00'), wthr_year=2023, featured_metric='mape')
+# print(mape)
 

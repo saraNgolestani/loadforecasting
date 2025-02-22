@@ -1,6 +1,7 @@
 import pandas as pd
 from typing import Optional, Tuple
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import mean_absolute_percentage_error, mean_absolute_error
 
@@ -32,6 +33,18 @@ class MODELS:
             }
             grid_search = GridSearchCV(GradientBoostingRegressor(random_state=42), param_grid, cv=5, scoring='neg_mean_squared_error', n_jobs=-1)
        
+        elif model_name == 'LinearRegression':
+            # No hyperparameters to tune, fit directly
+            best_model = LinearRegression()
+            best_model.fit(self.x_train, self.y_train)
+            best_params = best_model.get_params()
+            feature_importance_df = pd.DataFrame({
+                'Feature': self.features,
+                'Importance': best_model.coef_
+            }).sort_values(by="Importance", ascending=False).reset_index(drop=True)
+            performance, self.y_pred = self.predict(best_model)
+            return best_model, best_params, feature_importance_df, performance
+        
         grid_search.fit(self.x_train, self.y_train)
         best_params = grid_search.best_params_
         best_model = grid_search.best_estimator_

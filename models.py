@@ -6,7 +6,7 @@ from sklearn.metrics import mean_absolute_percentage_error, mean_absolute_error
 
 class MODELS:
 
-    def __init__(self, x_train: pd.DataFrame, y_train: pd.DataFrame, forecast_start: pd.Timestamp, forecast_end: pd.Timestamp, x_test: Optional[pd.DataFrame] = None, y_test: Optional[pd.DataFrame] = None):
+    def __init__(self, x_train: pd.DataFrame, y_train: pd.DataFrame, x_test: Optional[pd.DataFrame] = None, y_test: Optional[pd.DataFrame] = None):
 
         self.x_train = x_train
         self.y_train = y_train
@@ -15,14 +15,8 @@ class MODELS:
         self.features = list(self.x_test.columns.values)
         self.models_info = {}
 
-    def train(self,model_name):
-
-        model, best_params, feature_importance_df = self.train_deafult(model_name)
-        performance = self.predict(model)
-
-        return model, best_params, feature_importance_df, performance
     
-    def train_deafult(self, model_name):
+    def train(self, model_name):
         if model_name == 'Randomforest':
             param_grid = {
                 'n_estimators': [10, 100],
@@ -42,41 +36,17 @@ class MODELS:
         best_params = grid_search.best_params_
         best_model = grid_search.best_estimator_
         feature_importance_df = pd.DataFrame({'Feature': self.features, 'Importance': best_model.feature_importances_}).sort_values(by="Importance",ascending=False).reset_index(drop=True)
-        
-        return best_model, best_params, feature_importance_df
+        performance, self.y_pred = self.predict(best_model)
 
-
-    def yearly_peak_mape(self):
-        y_test_max_by_date = self.y_test.groupby(self.y_test.index.year).max()
-
-        # Find corresponding maximum values in y_pred
-        y_pred_max_by_date = [max(self.y_pred[self.y_test.index.year == date]) for date in y_test_max_by_date.index]
-
-        # Calculate MAPE for the maximum values
-        return mean_absolute_percentage_error(y_test_max_by_date, y_pred_max_by_date)
+        return best_model, best_params, feature_importance_df, performance
 
     
     def daily_peak_mape(self):
-        # Group y_true by date and find maximum values
         y_test_max_by_date = self.y_test.groupby(self.y_test.index.day).max()
 
-        # Find corresponding maximum values in y_pred
         y_pred_max_by_date = [max(self.y_pred[self.y_test.index.day == date]) for date in y_test_max_by_date.index]
 
-        # Calculate MAPE for the maximum values
         return mean_absolute_percentage_error(y_test_max_by_date, y_pred_max_by_date)
-
-    
-    def monthly_peak_mape(self):
-        # Group y_true by date and find maximum values
-        y_test_max_by_date = self.y_test.groupby(self.y_test.index.month).max()
-
-        # Find corresponding maximum values in y_pred
-        y_pred_max_by_date = [max(self.y_pred[self.y_test.index.month == date]) for date in y_test_max_by_date.index]
-
-        # Calculate MAPE for the maximum values
-        return mean_absolute_percentage_error(y_test_max_by_date, y_pred_max_by_date)
-
 
     def predict(self, best_model) -> Tuple:
 
@@ -90,8 +60,7 @@ class MODELS:
             performance = {
                 'mae': mean_absolute_error(self.y_test, self.y_pred),
                 'mape': mean_absolute_percentage_error(self.y_test, self.y_pred),
-                'daily_peak_mape': self.daily_peak_mape(),
-                'monthly_peak_mape': self.monthly_peak_mape()
+                'daily_peak_mape': self.daily_peak_mape()
             }
         
         return performance, self.y_pred

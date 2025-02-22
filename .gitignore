@@ -4,3 +4,4 @@
 *.ppt
 *.pdf
 data\*
+__pycache__/

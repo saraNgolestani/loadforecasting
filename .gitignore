@@ -1,0 +1,6 @@
+*.xlxs
+*.csv
+*.ppxt
+*.ppt
+*.pdf
+data\*

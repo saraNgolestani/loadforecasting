@@ -69,6 +69,7 @@ class Diagnose_Forecast():
         master_df.set_index('DATETIME', inplace=True)
         df = master_df[master_df.index.year == wthr_year]
         X_pred = pd.DataFrame()
+        forecast_end = forecast_end + pd.Timedelta(days=1)
         #the following should be for all wthr related or scenario related values.
         wthr_df = df[['TEMP_LAG_2H', 'TEMPERATURE', 'EXTREME_COLD']]
         wthr_df.index = wthr_df.index.map(lambda dt: self.safe_replace_year(dt, forecast_start.year))
@@ -98,7 +99,7 @@ class Diagnose_Forecast():
         else: mape = 'NA'
         return master_df, X_pred, Y_pred, Y_pred_true, mape
 
-# test = Diagnose_Forecast(train_start=pd.Timestamp('2021-01-01 00:00:00'), train_end= pd.Timestamp('2025-01-31 23:59:59'), validation_period=14, models=['XGBoost', 'Randomforest', 'LinearRegression'], winter=False)
-# _, _, _, _, mape = test.forecast(forecast_start=pd.Timestamp('2024-10-15 00:00:00'), forecast_end=pd.Timestamp('2024-10-30 00:00:00'), wthr_year=2023, featured_metric='mape')
+# test = Diagnose_Forecast(train_start=pd.Timestamp('2024-01-01 00:00:00'), train_end= pd.Timestamp('2025-01-31 23:59:59'), validation_period=14, models=['XGBoost', 'Randomforest', 'LinearRegression'], winter=True)
+# _, _, _, _, mape = test.forecast(forecast_start=pd.Timestamp('2025-01-15 00:00:00'), forecast_end=pd.Timestamp('2025-01-31 00:00:00'), wthr_year=2025, featured_metric='daily_peak_mape')
 # print(mape)
 

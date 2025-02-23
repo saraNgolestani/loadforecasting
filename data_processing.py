@@ -29,7 +29,7 @@ class DataLoader():
         # lagged wthr data for better comprehention
         df['EXTREME_COLD'] = df['TEMPERATURE'].apply(lambda x: 1 if x <= -20 else 0)
         df['TEMP_LAG_2H'] = df['TEMPERATURE'].shift(2).fillna(method='bfill', limit=2)
-        df = df[df['DATETIME'].isin(self.date_range)]
+      #   df = df[df['DATETIME'].isin(self.date_range)]
         self.master_df = df
         return df 
 

@@ -61,10 +61,14 @@ def update_forecast(n_clicks, start_date, end_date, season, wthr_year, featured_
     if n_clicks == 0:
         return go.Figure(), ''
     
+    #the following is the core of the training process, with the training and validation range and also defining which models to run this process with. 
     diagfcst_object = Diagnose_Forecast(validation_period=14, 
                                         models=['XGBoost', 'Randomforest', 'LinearRegression'],
                                         winter=season,
                                         train_start=pd.Timestamp('2024-01-01 00:00:00'), train_end=pd.Timestamp('2025-01-31 23:59:59'))
+    
+
+    #After diagnose, the forecasting modelu would choose the best featured parameter between the given models and runs the forecast with that. 
     Historical_df, X_pred, Y_pred, Y_pred_true, mape = diagfcst_object.forecast(
         forecast_start=pd.Timestamp(start_date),
         forecast_end=pd.Timestamp(end_date),

@@ -1,0 +1,20 @@
+name: enmax
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python==3.11.0
+  
+  - conda:
+    - dash=2.7.0
+    - matplotlib-base=3.10.0
+    - numpy=1.26.4
+    - numpy-base=1.26.4
+    - pandas=2.2.3
+    - pillow=11.1.0
+    - pip=25.0
+    - plotly=5.6.0
+    - python=3.11.0
+    - scikit-learn=1.6.1

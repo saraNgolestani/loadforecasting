@@ -94,7 +94,7 @@ class Diagnose_Forecast():
         model = models_metrics['Model'][best_mape_index]
         print(models_metrics['Model_Name'][best_mape_index])
         Y_pred = model.predict(X_pred)
-        if not Y_pred_true.empty:
+        if len(Y_pred_true) == len(Y_pred):
             mape  = mean_absolute_percentage_error(Y_pred_true, Y_pred)
         else: mape = 'NA'
         return master_df, X_pred, Y_pred, Y_pred_true, mape

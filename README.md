@@ -19,7 +19,8 @@ then we have a diagnose module which will accept a training period, a season, an
 Then the forecasting function will take in a featured metric, a weather year, and a forecasting period and will choose the best trained model on diagnose based on the featured metric and will forecast on that period with the features extracted from the chosen weather year on that very same period based on historical values. 
 
 ## Note:
-Ensure you have the necessary libraries and dependencies installed as per the script's requirements.
+Ensure you have the necessary libraries and dependencies installed as per the script's requirements. The following setups are set to be on a MacOS, 
+There might be some very slight changes needed once set on a Windows device.
 
 ## Author: 
 Sara Naseri Golestani
@@ -33,6 +34,7 @@ In the terminal of the project root directory run:
 1. Run `conda env create -f environment.yml` to create the environment
 2. `conda activate enmax`
 
+have the .csv file under a `data/` directory in main folder.
 ## Dashboard
 
 on `dashboard.py` set the desired training period for diagnose and then run the following command on your conda environment
@@ -41,7 +43,7 @@ on `dashboard.py` set the desired training period for diagnose and then run the 
 python dashboard.py
 ```
 this will run a local dashboard on default ports: `127.0.01:8050`
-the dashboard will accept inouts for your desired forecast and after you pres on run forecast, you would be able to see the forecasted values. 
+the dashboard will accept inouts for your desired forecast and after you press on `run Pipeline`, you would be able to see the forecasted values. 
 
 ### Example
 

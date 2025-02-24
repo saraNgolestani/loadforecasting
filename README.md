@@ -33,6 +33,7 @@ In the terminal of the project root directory run:
 1. Run `conda env create -f environment.yml` to create the environment
 2. `conda activate enmax`
 
+have the .csv file under a `data\` directory in main folder.
 ## Dashboard
 
 on `dashboard.py` set the desired training period for diagnose and then run the following command on your conda environment

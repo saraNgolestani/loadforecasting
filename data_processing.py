@@ -1,9 +1,10 @@
 
 import pandas as pd
+import os
 
 class DataLoader():
      def __init__(self,  history_start:pd.Timestamp, history_end:pd.Timestamp, winter: bool):
-        self.path =  r'./data/Load and Temp Hist Data.csv'
+        self.path = os.path.join('data', 'Load and Temp Hist Data.csv')
         self.history_start = history_start
         self.history_end = history_end
         self.master_df = None

@@ -77,7 +77,7 @@ class Diagnose_Forecast():
         date_range = pd.date_range(forecast_start, forecast_end, freq='h')
         # prepare the calendar related values
         X_pred['DATETIME'] = date_range
-        X_pred['SUN_UP'] = X_pred['DATETIME'].dt.hour.apply(lambda x: 1 if 7 <= x <= 10 or 16 <= x <= 21 else 0)
+        X_pred['PEAK'] = X_pred['DATETIME'].dt.hour.apply(lambda x: 1 if 7 <= x <= 10 or 16 <= x <= 21 else 0)
         X_pred['MONTH'] = X_pred['DATETIME'].dt.month
         X_pred['DAY'] = X_pred['DATETIME'].dt.day
         X_pred['HE'] = X_pred['DATETIME'].dt.hour + 1

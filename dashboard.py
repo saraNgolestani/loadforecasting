@@ -79,11 +79,10 @@ def update_forecast(n_clicks, start_date, end_date, season, wthr_year, featured_
     figure = go.Figure()
     figure.add_trace(go.Scatter(x=Historical_df.index, y=Historical_df['AIL_ACTUAL'], mode='lines', name='Historical'))
     figure.add_trace(go.Scatter(x=X_pred.index, y=Y_pred, mode='lines', name='Forecast'))
-    figure.update_layout(title='Actual vs Forecast', xaxis_title='Date', yaxis_title='Value')
+    figure.update_layout(title='Historical and Forecast values', xaxis_title='Date', yaxis_title='MW')
     mape_text = f"MAPE: {round(mape, ndigits=4)} for the period of {start_date} to {end_date}" if mape != 'NA' else f"MAPE: Not Available for the period of {start_date} to {end_date}"
 
     return figure, mape_text
-
 
 if __name__ == '__main__':
     app.run_server(debug = True)

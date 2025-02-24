@@ -20,7 +20,7 @@ class DataLoader():
         df.drop(columns=['ADJ_DATE', 'DEL_DATE', 'HB'], inplace=True)
 
         # Extracting calendar features 
-        df['SUN_UP'] = df['DATETIME'].dt.hour.apply(lambda x: 1 if 7 <= x <= 10 or 16 <= x <= 21 else 0)
+        df['PEAK'] = df['DATETIME'].dt.hour.apply(lambda x: 1 if 7 <= x <= 10 or 16 <= x <= 21 else 0)
         df['MONTH'] = df['DATETIME'].dt.month
         df['DAY'] = df['DATETIME'].dt.day
         df['DAYOFWEEK'] = df['DATETIME'].dt.dayofweek

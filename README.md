@@ -1,5 +1,5 @@
 ## Load Forecasting
-This project performs energy consumption forecasting with only give feature as temprature. this project is designed to give user the range of inputs to select their desired forecasting period, their important feature and also the season in which they want to run this model on. 
+This project performs energy consumption forecasting with only given feature as temprature. this project is designed to give user the range of inputs to select their desired forecasting period, their important feature and also the season in which they want to run this model on. 
 it has the capability to have the options extended to the models of their choosing for training, their desired training period, their desired features and etc. but for the purpose of simpilicity we have kept these at minimum. 
 
 ## Pipeline Overview
